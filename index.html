@@ -127,11 +127,8 @@
     </div>
     <div class="section" id="vid">
       <div class="section-label">Latest Video</div>
-      <div class="vid-card" style="display:block; text-decoration:none;">
-        <div class="video-wrap" style="height:auto; margin-bottom:10px;">
-          <iframe src="https://www.youtube.com/embed/xpq_3s9QgPE" allowfullscreen></iframe>
-        </div>
-        <div class="vid-info"><div class="vid-title">Sniper Arena — Free for All</div><div class="vid-tag">Sniper Arena</div></div>
+      <div id="latestVid">
+        <div style="text-align:center;padding:24px;font-size:11px;color:#2a4a7a;letter-spacing:1px;">Loading latest video...</div>
       </div>
     </div>
     <div class="section" style="padding-top:0;">
@@ -140,34 +137,19 @@
         <button class="vid-tab active" onclick="switchTab('all',this)">All</button>
         <button class="vid-tab" onclick="switchTab('hypershot',this)">Hypershot</button>
         <button class="vid-tab" onclick="switchTab('sniper',this)">Sniper Arena</button>
+        <button class="vid-tab" onclick="switchTab('live',this)">Live Videos</button>
       </div>
       <div class="vid-panel active" id="tab-all">
-        <div class="vid-grid">
-          <a href="https://www.youtube.com/@srjz" class="vid-card" target="_blank">
-            <div class="vid-thumb">🔭</div>
-            <div class="vid-info"><div class="vid-title">Sniper Arena — Free for All</div><div class="vid-tag">Sniper Arena</div></div>
-          </a>
-          <a href="https://www.youtube.com/@srjz" class="vid-card" target="_blank">
-            <div class="vid-thumb">🎯</div>
-            <div class="vid-info"><div class="vid-title">Hypershot Gameplay</div><div class="vid-tag">Hypershot</div></div>
-          </a>
-        </div>
+        <div style="text-align:center;padding:24px;font-size:11px;color:#2a4a7a;letter-spacing:1px;">Loading videos...</div>
       </div>
       <div class="vid-panel" id="tab-hypershot">
-        <div class="vid-grid">
-          <a href="https://www.youtube.com/@srjz" class="vid-card" target="_blank">
-            <div class="vid-thumb">🎯</div>
-            <div class="vid-info"><div class="vid-title">Hypershot Gameplay</div><div class="vid-tag">Hypershot</div></div>
-          </a>
-        </div>
+        <div style="text-align:center;padding:24px;font-size:11px;color:#2a4a7a;letter-spacing:1px;">Loading...</div>
       </div>
       <div class="vid-panel" id="tab-sniper">
-        <div class="vid-grid">
-          <a href="https://www.youtube.com/@srjz" class="vid-card" target="_blank">
-            <div class="vid-thumb">🔭</div>
-            <div class="vid-info"><div class="vid-title">Sniper Arena — Free for All</div><div class="vid-tag">Sniper Arena</div></div>
-          </a>
-        </div>
+        <div style="text-align:center;padding:24px;font-size:11px;color:#2a4a7a;letter-spacing:1px;">Loading...</div>
+      </div>
+      <div class="vid-panel" id="tab-live">
+        <div style="text-align:center;padding:24px;font-size:11px;color:#2a4a7a;letter-spacing:1px;">Loading...</div>
       </div>
       <div class="yt-banner" style="margin-top:16px;">
         <div class="yt-left">
@@ -312,5 +294,87 @@
   }
   checkLive();
   setInterval(checkLive, 60000);
+ 
+  const YT_KEY = 'AIzaSyB773TXqfFdrTLnK3pFrLDj54YzmXK0KkY';
+ 
+  function makeCard(vidId, title, thumb, tag) {
+    return `<a href="https://www.youtube.com/watch?v=${vidId}" class="vid-card" target="_blank">
+      <div class="vid-thumb" style="padding:0;">
+        <img src="${thumb}" alt="${title}" style="width:100%;height:100%;object-fit:cover;display:block;">
+      </div>
+      <div class="vid-info">
+        <div class="vid-title">${title}</div>
+        <div class="vid-tag">${tag}</div>
+      </div>
+    </a>`;
+  }
+ 
+  function empty(msg) {
+    return `<div style="text-align:center;padding:24px;font-size:11px;color:#2a4a7a;letter-spacing:1px;">${msg}</div>`;
+  }
+ 
+  async function fetchVideos() {
+    try {
+      // Step 1: get channel ID from handle
+      const chRes = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=id,contentDetails&forHandle=srjz&key=${YT_KEY}`);
+      const chData = await chRes.json();
+      if (!chData.items || !chData.items.length) return;
+      const channelId = chData.items[0].id;
+      const uploadsId = chData.items[0].contentDetails.relatedPlaylists.uploads;
+ 
+      // Step 2: get latest uploads from uploads playlist
+      const plRes = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsId}&maxResults=20&key=${YT_KEY}`);
+      const plData = await plRes.json();
+      if (!plData.items || !plData.items.length) return;
+ 
+      const items = plData.items;
+ 
+      // Step 3: get video details to detect live broadcasts
+      const ids = items.map(i => i.snippet.resourceId.videoId).join(',');
+      const vRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${ids}&key=${YT_KEY}`);
+      const vData = await vRes.json();
+      const videos = vData.items || [];
+ 
+      // Latest video — embed the newest one
+      if (videos.length > 0) {
+        const v = videos[0];
+        const vidId = v.id;
+        const title = v.snippet.title;
+        document.getElementById('latestVid').innerHTML = `
+          <div class="vid-card" style="display:block;text-decoration:none;">
+            <div class="video-wrap" style="height:auto;margin-bottom:10px;">
+              <iframe src="https://www.youtube.com/embed/${vidId}" allowfullscreen></iframe>
+            </div>
+            <div class="vid-info"><div class="vid-title">${title}</div><div class="vid-tag">Latest</div></div>
+          </div>`;
+      }
+ 
+      // Sort into categories
+      const all = videos;
+      const hypershot = videos.filter(v => v.snippet.title.toLowerCase().includes('hypershot'));
+      const sniper = videos.filter(v => v.snippet.title.toLowerCase().includes('sniper'));
+      const liveVids = videos.filter(v => v.snippet.liveBroadcastContent === 'completed' || v.snippet.title.toLowerCase().includes('live'));
+ 
+      function renderGrid(vids, tag) {
+        if (!vids.length) return empty('No videos yet');
+        return `<div class="vid-grid">${vids.map(v => {
+          const thumb = (v.snippet.thumbnails.medium || v.snippet.thumbnails.default).url;
+          return makeCard(v.id, v.snippet.title, thumb, tag);
+        }).join('')}</div>`;
+      }
+ 
+      document.getElementById('tab-all').innerHTML = renderGrid(all, 'Video');
+      document.getElementById('tab-hypershot').innerHTML = renderGrid(hypershot, 'Hypershot');
+      document.getElementById('tab-sniper').innerHTML = renderGrid(sniper, 'Sniper Arena');
+      document.getElementById('tab-live').innerHTML = renderGrid(liveVids, 'Saved Live');
+ 
+    } catch(e) {
+      console.error('YouTube fetch error:', e);
+      document.getElementById('latestVid').innerHTML = empty('Could not load video');
+    }
+  }
+ 
+  fetchVideos();
 </script>
 </body>
+</html>
