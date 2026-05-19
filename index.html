@@ -1,104 +1,141 @@
+
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800;900&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
-  .wrap { background: #050508; font-family: 'Orbitron', sans-serif; color: #fff; border-radius: 16px; overflow: hidden; }
-  .nav { display: flex; justify-content: space-between; align-items: center; padding: 18px 28px; border-bottom: 0.5px solid #ffffff12; }
-  .nav-logo { font-size: 14px; font-weight: 800; letter-spacing: 4px; text-transform: uppercase; color: #fff; }
+  @keyframes pulse { 0%,100%{opacity:1;}50%{opacity:0.4;} }
+  .wrap { font-family: 'Orbitron', sans-serif; color: #fff; border-radius: 16px; overflow: hidden; position: relative; }
+  .sky { position: absolute; inset: 0; z-index: 0; background: linear-gradient(180deg, #01060f 0%, #020d22 20%, #031535 45%, #051d45 70%, #0a1a3a 100%); }
+  .stars-layer { position: absolute; inset: 0; z-index: 1; }
+  .content { position: relative; z-index: 2; }
+  .nav { display: flex; justify-content: space-between; align-items: center; padding: 18px 28px; border-bottom: 0.5px solid #ffffff10; background: #010a1a55; }
+  .nav-logo { font-size: 14px; font-weight: 800; letter-spacing: 4px; text-transform: uppercase; color: #a8c8ff; }
   .nav-live { display: flex; align-items: center; gap: 6px; font-size: 10px; color: #ff4d4d; font-weight: 700; letter-spacing: 2px; }
   .nav-live span { width: 7px; height: 7px; border-radius: 50%; background: #ff4d4d; animation: pulse 1.5s infinite; display: inline-block; }
   .hero { padding: 64px 28px 48px; text-align: center; animation: fadeUp 0.6s ease both; }
-  .badge { display: inline-block; background: #7F77DD22; color: #AFA9EC; border: 0.5px solid #7F77DD55; border-radius: 99px; font-size: 9px; font-weight: 700; letter-spacing: 3px; padding: 5px 14px; margin-bottom: 20px; text-transform: uppercase; }
-  .hero h1 { font-size: 48px; font-weight: 900; letter-spacing: -1px; line-height: 1.1; margin-bottom: 14px; }
-  .hero h1 span { color: #7F77DD; }
-  .hero p { color: #888; font-size: 12px; max-width: 360px; margin: 0 auto 28px; line-height: 1.9; letter-spacing: 1px; }
+  .hero h1 { font-size: 48px; font-weight: 900; letter-spacing: -1px; line-height: 1.1; margin-bottom: 14px; color: #fff; }
+  .hero h1 span { color: #4a9eff; }
+  .hero p { color: #5a7fa8; font-size: 12px; max-width: 360px; margin: 0 auto 28px; line-height: 1.9; letter-spacing: 1px; }
   .btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-  .btn-main { background: #7F77DD; color: #fff; padding: 12px 26px; border-radius: 12px; font-weight: 700; font-size: 11px; border: none; cursor: pointer; letter-spacing: 2px; font-family: 'Orbitron', sans-serif; }
-  .btn-ghost { background: transparent; color: #fff; padding: 12px 26px; border-radius: 12px; font-weight: 600; font-size: 11px; border: 0.5px solid #ffffff22; cursor: pointer; letter-spacing: 2px; font-family: 'Orbitron', sans-serif; }
-  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: #ffffff0a; border-top: 0.5px solid #ffffff0a; border-bottom: 0.5px solid #ffffff0a; }
-  .stat { padding: 20px; text-align: center; background: #050508; }
-  .stat-num { font-size: 14px; font-weight: 800; color: #fff; letter-spacing: 2px; }
-  .stat-label { font-size: 9px; color: #555; margin-top: 4px; letter-spacing: 2px; text-transform: uppercase; }
+  .btn-main { background: #1a5fd4; color: #fff; padding: 12px 26px; border-radius: 12px; font-weight: 700; font-size: 11px; border: none; cursor: pointer; letter-spacing: 2px; font-family: 'Orbitron', sans-serif; }
+  .btn-ghost { background: #ffffff08; color: #7eb8ff; padding: 12px 26px; border-radius: 12px; font-weight: 600; font-size: 11px; border: 0.5px solid #2a5a9a; cursor: pointer; letter-spacing: 2px; font-family: 'Orbitron', sans-serif; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: #ffffff08; border-top: 0.5px solid #ffffff0a; border-bottom: 0.5px solid #ffffff0a; }
+  .stat { padding: 20px; text-align: center; background: #020d2299; }
+  .stat-num { font-size: 14px; font-weight: 800; color: #7eb8ff; letter-spacing: 2px; }
+  .stat-label { font-size: 9px; color: #2a4a7a; margin-top: 4px; letter-spacing: 2px; text-transform: uppercase; }
   .section { padding: 32px 24px; }
-  .section-label { font-size: 9px; letter-spacing: 3px; color: #555; text-transform: uppercase; margin-bottom: 16px; }
-  .video-wrap { border-radius: 14px; overflow: hidden; aspect-ratio: 16/9; border: 0.5px solid #ffffff10; }
+  .section-label { font-size: 9px; letter-spacing: 3px; color: #2a5a8a; text-transform: uppercase; margin-bottom: 16px; }
+  .video-wrap { border-radius: 14px; overflow: hidden; aspect-ratio: 16/9; border: 0.5px solid #1a3a6a; }
   .video-wrap iframe { width: 100%; height: 100%; border: none; display: block; }
+  .yt-banner { display: flex; align-items: center; justify-content: space-between; background: #010a1a99; border: 0.5px solid #ff000033; border-radius: 14px; padding: 16px 20px; margin-top: 16px; }
+  .yt-left { display: flex; align-items: center; gap: 12px; }
+  .yt-icon { width: 40px; height: 40px; border-radius: 10px; background: #ff000018; border: 0.5px solid #ff000033; display: flex; align-items: center; justify-content: center; }
+  .yt-icon i { font-size: 20px; color: #ff4444; }
+  .yt-name { font-size: 12px; font-weight: 800; letter-spacing: 2px; color: #fff; }
+  .yt-sub { font-size: 9px; color: #2a4a7a; letter-spacing: 1px; margin-top: 2px; }
+  .yt-btn { background: #ff4444; color: #fff; padding: 8px 18px; border-radius: 8px; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; border: none; cursor: pointer; font-family: 'Orbitron', sans-serif; text-decoration: none; display: inline-block; }
   .game-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
-  .game-card { background: #0d0d14; border: 0.5px solid #ffffff0f; border-radius: 16px; padding: 18px; }
+  .game-card { background: #010a1a99; border: 0.5px solid #1a3a6a; border-radius: 16px; padding: 18px; }
   .game-icon { font-size: 26px; margin-bottom: 10px; }
-  .game-title { font-size: 11px; font-weight: 800; margin-bottom: 6px; letter-spacing: 2px; color: #fff; }
-  .game-sub { font-size: 10px; color: #555; line-height: 1.7; letter-spacing: 0.5px; }
+  .game-title { font-size: 11px; font-weight: 800; margin-bottom: 6px; letter-spacing: 2px; color: #7eb8ff; }
+  .game-sub { font-size: 10px; color: #2a4a7a; line-height: 1.7; letter-spacing: 0.5px; }
   .tags { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
-  .tag { font-size: 9px; padding: 3px 10px; border-radius: 99px; background: #7F77DD18; color: #7F77DD; border: 0.5px solid #7F77DD33; letter-spacing: 1px; font-family: 'Orbitron', sans-serif; }
-  footer { padding: 20px 28px; border-top: 0.5px solid #ffffff0a; display: flex; justify-content: space-between; align-items: center; }
-  .footer-logo { font-size: 11px; font-weight: 800; letter-spacing: 3px; color: #333; text-transform: uppercase; }
-  .footer-links a { color: #333; font-size: 10px; text-decoration: none; letter-spacing: 1px; }
-  .footer-links a:hover { color: #7F77DD; }
+  .tag { font-size: 9px; padding: 3px 10px; border-radius: 99px; background: #0d3a7a33; color: #4a9eff; border: 0.5px solid #1a5fd422; letter-spacing: 1px; font-family: 'Orbitron', sans-serif; }
+  footer { padding: 20px 28px; border-top: 0.5px solid #ffffff08; display: flex; justify-content: space-between; align-items: center; background: #010a1a99; }
+  .footer-logo { font-size: 11px; font-weight: 800; letter-spacing: 3px; color: #1a3a6a; text-transform: uppercase; }
+  .footer-links a { color: #1a3a6a; font-size: 10px; text-decoration: none; letter-spacing: 1px; }
+  .footer-links a:hover { color: #4a9eff; }
 </style>
 
 <div class="wrap">
-  <nav class="nav">
-    <div class="nav-logo">srjzx</div>
-    <div class="nav-live"><span></span> live</div>
-  </nav>
-
-  <div class="hero">
-    <div class="badge">creator & gamer</div>
-    <h1>Play.<br><span>Stream.</span><br>Dominate.</h1>
-    <p>Hypershot. Sniper Arena. Roblox shooter content and streams worth watching.</p>
-    <div class="btns">
-      <button class="btn-main" onclick="document.getElementById('vid').scrollIntoView({behavior:'smooth'})">Watch Videos</button>
-      <a href="https://www.youtube.com/@srjz" target="_blank">
-  <button class="btn-ghost">Join Stream</button>
-</a>
-    </div>
-  </div>
-
-  <div class="stats">
-    <div class="stat">
-      <div class="stat-num">Roblox</div>
-      <div class="stat-label">platform</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">Live</div>
-      <div class="stat-label">streaming</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">2026</div>
-      <div class="stat-label">active</div>
-    </div>
-  </div>
-
-  <div class="section" id="vid">
-    <div class="section-label">Latest video</div>
-    <div class="video-wrap">
-      <iframe src="https://www.youtube.com/embed/xpq_3s9QgPE" allowfullscreen></iframe>
-    </div>
-  </div>
-
-  <div class="section" style="padding-top:0;">
-    <div class="section-label">Games I play</div>
-    <div class="game-cards">
-      <div class="game-card">
-        <div class="game-icon">🎯</div>
-        <div class="game-title">Hypershot</div>
-        <div class="game-sub">Fast-paced Roblox shooting with insane aim duels.</div>
-        <div class="tags"><span class="tag">Shooter</span><span class="tag">Roblox</span></div>
-      </div>
-      <div class="game-card">
-        <div class="game-icon">🔭</div>
-        <div class="game-title">Sniper Arena</div>
-        <div class="game-sub">Long range precision sniper battles on Roblox.</div>
-        <div class="tags"><span class="tag">Sniper</span><span class="tag">Roblox</span></div>
+  <div class="sky"></div>
+  <canvas class="stars-layer" id="starCanvas"></canvas>
+  <div class="content">
+    <nav class="nav">
+      <div class="nav-logo">srjzx</div>
+      <div class="nav-live"><span></span> live</div>
+    </nav>
+    <div class="hero">
+      <h1>Play.<br><span>Stream.</span><br>Dominate.</h1>
+      <p>Hypershot. Sniper Arena. Roblox shooter content and streams worth watching.</p>
+      <div class="btns">
+        <button class="btn-main" onclick="document.getElementById('vid').scrollIntoView({behavior:'smooth'})">Watch Videos</button>
+        <button class="btn-ghost">Join Stream</button>
       </div>
     </div>
-  </div>
-
-  <footer>
-    <div class="footer-logo">srjzx</div>
-    <div class="footer-links">
-      <a href="https://www.youtube.com/live/xpq_3s9QgPE">YouTube</a>
+    <div class="stats">
+      <div class="stat"><div class="stat-num">Roblox</div><div class="stat-label">platform</div></div>
+      <div class="stat"><div class="stat-num">Live</div><div class="stat-label">streaming</div></div>
+      <div class="stat"><div class="stat-num">2026</div><div class="stat-label">active</div></div>
     </div>
-  </footer>
+    <div class="section" id="vid">
+      <div class="section-label">Latest video</div>
+      <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/xpq_3s9QgPE" allowfullscreen></iframe>
+      </div>
+      <div class="yt-banner">
+        <div class="yt-left">
+          <div class="yt-icon"><i class="ti ti-brand-youtube" aria-hidden="true"></i></div>
+          <div><div class="yt-name">@srjz</div><div class="yt-sub">youtube channel</div></div>
+        </div>
+        <a href="https://www.youtube.com/@srjz" class="yt-btn">Subscribe</a>
+      </div>
+    </div>
+    <div class="section" style="padding-top:0;">
+      <div class="section-label">Games I play</div>
+      <div class="game-cards">
+        <div class="game-card">
+          <div class="game-icon">🎯</div>
+          <div class="game-title">Hypershot</div>
+          <div class="game-sub">Fast-paced Roblox shooting with insane aim duels.</div>
+          <div class="tags"><span class="tag">Shooter</span><span class="tag">Roblox</span></div>
+        </div>
+        <div class="game-card">
+          <div class="game-icon">🔭</div>
+          <div class="game-title">Sniper Arena</div>
+          <div class="game-sub">Long range precision sniper battles on Roblox.</div>
+          <div class="tags"><span class="tag">Sniper</span><span class="tag">Roblox</span></div>
+        </div>
+      </div>
+    </div>
+    <footer>
+      <div class="footer-logo">srjzx</div>
+      <div class="footer-links"><a href="https://www.youtube.com/@srjz">YouTube</a></div>
+    </footer>
+  </div>
 </div>
+
+<script>
+  const canvas = document.getElementById('starCanvas');
+  const wrap = canvas.parentElement;
+  function resize() { canvas.width = wrap.offsetWidth; canvas.height = wrap.offsetHeight; drawStars(); }
+  function drawStars() {
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < 180; i++) {
+      const x = Math.random() * canvas.width, y = Math.random() * canvas.height;
+      const r = Math.random() * 1.4 + 0.2, b = Math.random() * 0.7 + 0.15;
+      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${180+Math.floor(Math.random()*60)},${200+Math.floor(Math.random()*40)},${Math.floor(Math.random()*80+180)},${b})`;
+      ctx.fill();
+      if (r > 1.0) { ctx.beginPath(); ctx.arc(x, y, r*2.2, 0, Math.PI*2); ctx.fillStyle = `rgba(150,190,255,${b*0.12})`; ctx.fill(); }
+    }
+  }
+  resize();
+  const twinkle = [];
+  for (let i = 0; i < 30; i++) twinkle.push({x:Math.random(),y:Math.random(),r:Math.random()*1.2+0.4,phase:Math.random()*Math.PI*2,speed:Math.random()*0.02+0.005});
+  function animate() {
+    drawStars();
+    const ctx = canvas.getContext('2d');
+    twinkle.forEach(s => {
+      s.phase += s.speed;
+      const a = (Math.sin(s.phase)+1)/2*0.7+0.1;
+      ctx.beginPath(); ctx.arc(s.x*canvas.width, s.y*canvas.height, s.r, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(200,220,255,${a})`; ctx.fill();
+      ctx.beginPath(); ctx.arc(s.x*canvas.width, s.y*canvas.height, s.r*2.5, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(150,190,255,${a*0.15})`; ctx.fill();
+    });
+    requestAnimationFrame(animate);
+  }
+  animate();
+</script>
